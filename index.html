@@ -414,31 +414,7 @@ footer{
   .game-card{grid-template-columns:27px 64px minmax(0,1fr);column-gap:9px;padding:14px}
   .game-icon{width:64px;height:48px;border-radius:16px}
 }
-
-.top-actions{display:flex;align-items:center;gap:8px;flex:none}
-.install-btn{
-  border:1px solid var(--brown);
-  border-radius:999px;
-  padding:10px 13px;
-  background:var(--yellow);
-  color:var(--brown);
-  font-size:12px;
-  font-weight:950;
-  cursor:pointer;
-  box-shadow:0 4px 0 rgba(74,37,27,.12);
-}
-.install-btn:hover{filter:brightness(.97);transform:translateY(-1px)}
-.install-btn:active{transform:translateY(1px)}
-@media(max-width:620px){
-  .top-actions{gap:6px}
-  .install-btn{padding:9px 10px;font-size:11px}
-}
 </style>
-    <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#4A251B">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body>
 <div class="topbar">
@@ -449,9 +425,7 @@ footer{
 <p class="brand-sub">Thực hiện bởi team 𝗠𝗲𝗲𝗚𝗮𝗺𝗲</p>
 </div>
 </div>
-<div class="top-actions"><div class="total-pill">GAMES HOT</div><button class="install-btn" id="installBtn" type="button" hidden>
-  ⬇ Cài app
-</button></div>
+<div class="total-pill">GAMES HOT</div>
 </div>
 <section class="hero">
 <div class="hero-main">
@@ -1465,7 +1439,7 @@ footer{
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
                                               src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fquannhau24h.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
 <div class="game-content">
-<h2>Quán Nhậu24/7</h2>
+<h2>Quán Nhậu 24g</h2>
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://quannhau24h.vercel.app/" rel="noopener noreferrer" target="_blank">
@@ -1479,8 +1453,7 @@ footer{
 <script>
 const input=document.getElementById('search'),
       cards=[...document.querySelectorAll('.game-card')],
-      empty=document.getElementById('empty'),
-      installBtn=document.getElementById('installBtn');
+      empty=document.getElementById('empty');
 
 function filter(){
   const q=input.value.toLowerCase().trim();
@@ -1493,48 +1466,6 @@ function filter(){
   empty.style.display=shown?'none':'block';
 }
 input.addEventListener('input',filter);
-
-/* PWA: đăng ký Service Worker */
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('./sw.js').catch(err=>{
-      console.warn('Service Worker chưa đăng ký được:', err);
-    });
-  });
-}
-
-/* Nút Cài app trên Android/Chrome/Edge */
-let deferredInstallPrompt=null;
-
-window.addEventListener('beforeinstallprompt', event=>{
-  event.preventDefault();
-  deferredInstallPrompt=event;
-  installBtn.hidden=false;
-});
-
-installBtn.addEventListener('click', async ()=>{
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    const result=await deferredInstallPrompt.userChoice;
-    deferredInstallPrompt=null;
-    installBtn.hidden=true;
-    console.log('Kết quả cài app:', result.outcome);
-    return;
-  }
-
-  /* iPhone/iPad: không có beforeinstallprompt */
-  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  if(isIOS){
-    alert('Trên iPhone/iPad: mở trang bằng Safari → Chia sẻ → Thêm vào Màn hình chính (Add to Home Screen).');
-  }else{
-    alert('Trình duyệt này chưa cho cài PWA. Hãy dùng Chrome/Edge và mở trang bằng HTTPS.');
-  }
-});
-
-window.addEventListener('appinstalled',()=>{
-  installBtn.hidden=true;
-  deferredInstallPrompt=null;
-});
 </script>
 </body>
 </html>
