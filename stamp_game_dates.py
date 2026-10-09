@@ -60,9 +60,15 @@ def main() -> None:
         if not link:
             return match.group(0)
         url = normalize_url(link.group(2))
-        if DATE_RE.search(attrs) or url in old_urls:
+        # Existing URL means this card is not newly added. If the URL changed
+        # since the previous commit, refresh its date even when the card already
+        # had a stale data-added attribute.
+        if url in old_urls:
             return match.group(0)
         changed += 1
+        if DATE_RE.search(attrs):
+            attrs = DATE_RE.sub(f'data-added="{today}"', attrs, count=1)
+            return '<article' + attrs + '>' + body + '</article>'
         return '<article' + attrs + f' data-added="{today}">' + body + '</article>'
 
     updated = CARD_RE.sub(patch_card, current)
