@@ -663,6 +663,7 @@ a:focus-visible,input:focus-visible{
 <nav class="game-tabs" aria-label="Lọc danh sách game">
 <button type="button" class="game-tab active" data-tab="all" aria-pressed="true">🎮 Tất cả game <span class="tab-count" id="all-count">0</span></button>
 <button type="button" class="game-tab" data-tab="recent" aria-pressed="false">🗂️ Game mới <span class="tab-count" id="recent-count">0</span></button>
+<button type="button" class="game-tab" data-tab="hot" aria-pressed="false">🔥 Game hot <span class="tab-count" id="hot-count">0</span></button>
 </nav>
 <p class="stats-note" id="stats-note">Lượt chơi được ghi nhận trên trình duyệt này. Muốn thống kê chung cho tất cả khách truy cập, cần kết nối cơ sở dữ liệu online.</p>
 <section class="grid" id="grid">
@@ -1824,6 +1825,13 @@ a:focus-visible,input:focus-visible{
 <footer>𝗠𝗲𝗲𝗚𝗮𝗺𝗲 | UPDATE MA-LINK </footer>
 <script>
 (() => {
+  // CẤU HÌNH SUPABASE: điền Project URL và anon/publishable key theo README_SETUP.txt.
+  const SUPABASE_URL = 'PASTE_SUPABASE_PROJECT_URL_HERE';
+  const SUPABASE_ANON_KEY = 'PASTE_SUPABASE_ANON_KEY_HERE';
+  const supabaseReady = SUPABASE_URL.startsWith('https://') &&
+    !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_') &&
+    SUPABASE_ANON_KEY.trim().length > 10;
+
   const input = document.getElementById('search');
   const grid = document.getElementById('grid');
   const cards = [...document.querySelectorAll('.game-card')];
@@ -1833,6 +1841,8 @@ a:focus-visible,input:focus-visible{
   today.setHours(0, 0, 0, 0);
   const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
   let activeTab = 'all';
+  let counts = {};
+  const pending = new Set();
 
   function addedAt(card) {
     const raw = card.dataset.added;
@@ -1846,30 +1856,100 @@ a:focus-visible,input:focus-visible{
     const age = today.getTime() - date.getTime();
     return age >= 0 && age < SEVEN_DAYS_MS;
   }
+  function gameKey(card) {
+    const link = card.querySelector('.play-btn');
+    try { return new URL(link?.href || location.href, location.href).href; }
+    catch (_) { return (link?.href || card.dataset.name || '').trim(); }
+  }
+  function countFor(card) { return Number(counts[gameKey(card)] || 0); }
+  function addStats(card) {
+    let stat = card.querySelector('.play-count');
+    if (!stat) {
+      stat = document.createElement('div');
+      stat.className = 'game-meta play-count';
+      stat.style.marginTop = '3px';
+      const content = card.querySelector('.game-content');
+      if (content) content.appendChild(stat);
+    }
+    stat.textContent = supabaseReady
+      ? '🔥 ' + countFor(card).toLocaleString('vi-VN') + ' lượt mở link (toàn hệ thống)'
+      : '🔥 Chưa kết nối thống kê toàn hệ thống';
+  }
   function updateTabCounts() {
     document.getElementById('all-count').textContent = cards.length;
     document.getElementById('recent-count').textContent = cards.filter(isRecent).length;
+    document.getElementById('hot-count').textContent = cards.filter(c => countFor(c) > 0).length;
   }
   function filter() {
     cards.forEach(card => { card.style.display = 'none'; });
     const q = (input.value || '').toLocaleLowerCase('vi-VN').trim();
     let list = [...cards];
-    if (activeTab === 'recent') {
-      list = list.filter(isRecent);
-      list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
-    }
+    if (activeTab === 'recent') list = list.filter(isRecent);
+    if (activeTab === 'hot') list.sort((a,b) => countFor(b) - countFor(a));
+    else if (activeTab === 'recent') list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
     list.forEach(card => {
       const name = (card.dataset.name || card.querySelector('h2')?.textContent || '').toLocaleLowerCase('vi-VN');
       card.style.display = name.includes(q) ? 'grid' : 'none';
+      addStats(card);
     });
     const visible = list.filter(card => card.style.display !== 'none').length;
     empty.style.display = visible ? 'none' : 'block';
     empty.textContent = activeTab === 'recent'
       ? 'Chưa có game được đánh dấu thêm trong 7 ngày gần đây.'
-      : 'Không tìm thấy game phù hợp.';
+      : activeTab === 'hot'
+        ? (supabaseReady ? 'Chưa có lượt mở link nào được ghi nhận. Hãy mở game để bắt đầu thống kê.' : 'Cần cấu hình Supabase để Game hot xếp hạng theo lượt mở link trên mọi thiết bị. Xem README_SETUP.txt trong gói tải về.')
+        : 'Không tìm thấy game phù hợp.';
     list.forEach(card => grid.appendChild(card));
     updateTabCounts();
   }
+  async function loadGlobalCounts() {
+    if (!supabaseReady) { filter(); return; }
+    try {
+      const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/game_play_stats?select=game_url,play_count', {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY }
+      });
+      if (!res.ok) throw new Error('Could not load global stats');
+      const rows = await res.json();
+      counts = {};
+      rows.forEach(row => { counts[row.game_url] = Number(row.play_count) || 0; });
+      filter();
+    } catch (err) {
+      console.warn('MeeGame global stats could not load:', err);
+      empty.textContent = 'Không tải được thống kê toàn hệ thống. Kiểm tra cấu hình Supabase và kết nối mạng.';
+      if (activeTab === 'hot') empty.style.display = 'block';
+    }
+  }
+  async function recordGlobalPlay(card) {
+    if (!supabaseReady) return;
+    const key = gameKey(card);
+    if (pending.has(key)) return;
+    pending.add(key);
+    try {
+      const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/rpc/increment_game_play', {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ p_game_url: key, p_game_name: card.dataset.name || card.querySelector('h2')?.textContent || key }),
+        keepalive: true
+      });
+      if (!res.ok) throw new Error('Could not record play');
+      counts[key] = countFor(card) + 1;
+      addStats(card);
+      updateTabCounts();
+      if (activeTab === 'hot') filter();
+    } catch (err) {
+      console.warn('MeeGame global play count could not be recorded:', err);
+    } finally { pending.delete(key); }
+  }
+
+  cards.forEach(card => {
+    addStats(card);
+    const play = card.querySelector('.play-btn');
+    if (play) play.addEventListener('click', () => { recordGlobalPlay(card); });
+  });
   tabs.forEach(tab => tab.addEventListener('click', () => {
     activeTab = tab.dataset.tab;
     tabs.forEach(t => {
@@ -1882,6 +1962,7 @@ a:focus-visible,input:focus-visible{
   input.addEventListener('input', filter);
   updateTabCounts();
   filter();
+  loadGlobalCounts();
 })();
 </script>
 </body>
