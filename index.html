@@ -1825,11 +1825,13 @@ a:focus-visible,input:focus-visible{
 <script>
 (() => {
   // CẤU HÌNH SUPABASE: điền Project URL và anon/publishable key theo README_SETUP.txt.
-  const SUPABASE_URL = 'sb_secret_JyjnqR-RpMuNpq21as-hJA_ZelY_-rQ';
+  const SUPABASE_URL = 'https://htrnwvupteggobokcrvb.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_pSqGk-pV3ZI1jmAuIujS1g_CxVVHx67';
-  const supabaseReady = SUPABASE_URL.startsWith('https://') &&
-    !SUPABASE_URL.includes('PASTE_') && !SUPABASE_ANON_KEY.includes('PASTE_') &&
-    SUPABASE_ANON_KEY.trim().length > 10;
+  const supabaseReady = /^https:\/\/[^\s]+\.supabase\.co\/?$/.test(SUPABASE_URL) &&
+    !SUPABASE_URL.includes('PASTE_') &&
+    !SUPABASE_ANON_KEY.includes('PASTE_') &&
+    SUPABASE_ANON_KEY.trim().length > 10 &&
+    !SUPABASE_ANON_KEY.startsWith('sb_secret_');
 
   const input = document.getElementById('search');
   const grid = document.getElementById('grid');
@@ -1872,7 +1874,7 @@ a:focus-visible,input:focus-visible{
     }
     stat.textContent = supabaseReady
       ? '🔥 ' + countFor(card).toLocaleString('vi-VN') + ' lượt mở link (toàn hệ thống)'
-      : '🔥 Chưa kết nối thống kê toàn hệ thống';
+      : '🔥 Chưa cấu hình Supabase: cần Project URL và Publishable key';
   }
   function updateTabCounts() {
     document.getElementById('all-count').textContent = cards.length;
