@@ -662,7 +662,7 @@ a:focus-visible,input:focus-visible{
 </div>
 <nav class="game-tabs" aria-label="Lọc danh sách game">
 <button type="button" class="game-tab active" data-tab="all" aria-pressed="true">🎮 Tất cả game <span class="tab-count" id="all-count">0</span></button>
-<button type="button" class="game-tab" data-tab="recent" aria-pressed="false">📣 Game mới <span class="tab-count" id="recent-count">0</span></button>
+<button type="button" class="game-tab" data-tab="recent" aria-pressed="false">📣 Game mới (3 ngày) <span class="tab-count" id="recent-count">0</span></button>
 <button type="button" class="game-tab" data-tab="hot" aria-pressed="false">🔥 Game hot <span class="tab-count" id="hot-count">0</span></button>
 </nav>
 <p class="stats-note" id="stats-note">Lượt chơi được ghi nhận trên trình duyệt này. Muốn thống kê chung cho tất cả khách truy cập, cần kết nối cơ sở dữ liệu online.</p>
@@ -1819,7 +1819,6 @@ a:focus-visible,input:focus-visible{
 </a>
 </article>
     
-    
 </section>
 <div class="empty" id="empty">Không tìm thấy game phù hợp.</div>
 <footer>𝗠𝗲𝗲𝗚𝗮𝗺𝗲 | UPDATE MA-LINK </footer>
@@ -1841,7 +1840,7 @@ a:focus-visible,input:focus-visible{
   const tabs = [...document.querySelectorAll('.game-tab')];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
   let activeTab = 'all';
   let counts = {};
   const pending = new Set();
@@ -1856,7 +1855,7 @@ a:focus-visible,input:focus-visible{
     const date = addedAt(card);
     if (!date) return false;
     const age = today.getTime() - date.getTime();
-    return age >= 0 && age < SEVEN_DAYS_MS;
+    return age >= 0 && age < THREE_DAYS_MS;
   }
   function gameKey(card) {
     const link = card.querySelector('.play-btn');
@@ -1874,7 +1873,7 @@ a:focus-visible,input:focus-visible{
       if (content) content.appendChild(stat);
     }
     stat.textContent = supabaseReady
-      ? '🔥 ' + countFor(card).toLocaleString('vi-VN') + ' lượt truy cập '
+      ? '🔥 ' + countFor(card).toLocaleString('vi-VN') + ' lượt mở link (toàn hệ thống)'
       : '🔥 Chưa cấu hình Supabase: cần Project URL và Publishable key';
   }
   function updateTabCounts() {
@@ -1897,7 +1896,7 @@ a:focus-visible,input:focus-visible{
     const visible = list.filter(card => card.style.display !== 'none').length;
     empty.style.display = visible ? 'none' : 'block';
     empty.textContent = activeTab === 'recent'
-      ? 'Chưa có game được đánh dấu thêm trong 7 ngày gần đây.'
+      ? 'Chưa có game được đánh dấu thêm trong 3 ngày gần đây.'
       : activeTab === 'hot'
         ? (supabaseReady ? 'Chưa có lượt mở link nào được ghi nhận. Hãy mở game để bắt đầu thống kê.' : 'Cần cấu hình Supabase để Game hot xếp hạng theo lượt mở link trên mọi thiết bị. Xem README_SETUP.txt trong gói tải về.')
         : 'Không tìm thấy game phù hợp.';
