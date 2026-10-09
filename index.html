@@ -614,6 +614,24 @@ a:focus-visible,input:focus-visible{
   *,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }
 
+
+/* Tabs lọc game */
+.game-tabs{
+  width:min(1180px,calc(100% - 32px));
+  margin:16px auto 0;
+  display:flex; gap:9px; flex-wrap:wrap; align-items:center;
+}
+.game-tab{
+  appearance:none; border:1px solid var(--line); background:var(--paper); color:var(--brown-2);
+  border-radius:999px; padding:11px 16px; font-family:inherit; font-size:13px; font-weight:800; line-height:1.2; cursor:pointer;
+  box-shadow:0 5px 14px rgba(74,37,27,.04); transition:transform .18s,background .18s,border-color .18s;
+}
+.game-tab:hover{transform:translateY(-1px); border-color:var(--yellow-deep)}
+.game-tab.active{background:var(--yellow); border-color:var(--yellow-deep); color:var(--brown)}
+.game-tab .tab-count{display:inline-flex; margin-left:6px; min-width:22px; justify-content:center; padding:3px 6px; border-radius:999px; background:rgba(74,37,27,.09); font-size:11px}
+.stats-note{width:min(1180px,calc(100% - 32px));margin:9px auto 0;color:var(--brown-3);font-size:11px;line-height:1.45}
+@media(max-width:620px){.game-tabs{width:calc(100% - 20px);margin-top:12px}.game-tab{padding:10px 13px;font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -642,6 +660,13 @@ a:focus-visible,input:focus-visible{
 </div>
 <div class="sort">↕ Sắp xếp A → Z</div>
 </div>
+<nav class="game-tabs" aria-label="Lọc danh sách game">
+<button type="button" class="game-tab active" data-tab="all" aria-pressed="true">🎮 Tất cả game <span class="tab-count" id="all-count">0</span></button>
+<button type="button" class="game-tab" data-tab="recent" aria-pressed="false">🆕 Game mới (7 ngày) <span class="tab-count" id="recent-count">0</span></button>
+<button type="button" class="game-tab" data-tab="old" aria-pressed="false">🗂️ Game cũ <span class="tab-count" id="old-count">0</span></button>
+<button type="button" class="game-tab" data-tab="hot" aria-pressed="false">🔥 Game hot <span class="tab-count" id="hot-count">0</span></button>
+</nav>
+<p class="stats-note" id="stats-note">Lượt chơi được ghi nhận trên trình duyệt này. Muốn thống kê chung cho tất cả khách truy cập, cần kết nối cơ sở dữ liệu online.</p>
 <section class="grid" id="grid">
 <article class="game-card" data-name="a bit saigon">
 <div class="game-number">01</div>
@@ -1633,7 +1658,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article> 
-<article class="game-card" data-name="quán nhậu">
+<article class="game-card" data-added="2026-10-06" data-name="quán nhậu">
 <div class="game-number">85</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Quán Nhậu" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1646,7 +1671,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="trà và chuyện nhỏ">
+<article class="game-card" data-added="2026-10-06" data-name="trà và chuyện nhỏ">
 <div class="game-number">86</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Trà và chuyện nhỏ" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1659,7 +1684,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="cây kéo thần,cắt tóc">
+<article class="game-card" data-added="2026-10-06" data-name="cây kéo thần,cắt tóc">
 <div class="game-number">87</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cây kéo thần" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1672,7 +1697,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="quần áo, shop quần áo, tiệm thời  ">
+<article class="game-card" data-added="2026-10-06" data-name="quần áo, shop quần áo, tiệm thời  ">
 <div class="game-number">88</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cây kéo thần" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1685,7 +1710,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="đồ ăn vặt">
+<article class="game-card" data-added="2026-10-06" data-name="đồ ăn vặt">
 <div class="game-number">89</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đồ ăn vặt" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1698,7 +1723,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="thị trấn nhỏ">
+<article class="game-card" data-added="2026-10-06" data-name="thị trấn nhỏ">
 <div class="game-number">90</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Thị trấn nhỏ" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1800,21 +1825,112 @@ a:focus-visible,input:focus-visible{
 <div class="empty" id="empty">Không tìm thấy game phù hợp.</div>
 <footer>𝗠𝗲𝗲𝗚𝗮𝗺𝗲 | UPDATE MA-LINK </footer>
 <script>
-const input=document.getElementById('search'),
-      cards=[...document.querySelectorAll('.game-card')],
-      empty=document.getElementById('empty');
+(() => {
+  const input = document.getElementById('search');
+  const grid = document.getElementById('grid');
+  const cards = [...document.querySelectorAll('.game-card')];
+  const empty = document.getElementById('empty');
+  const tabs = [...document.querySelectorAll('.game-tab')];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  const STORAGE_KEY = 'meegame-play-counts-v1';
+  let activeTab = 'all';
+  let counts = {};
+  try { counts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; }
+  catch (_) { counts = {}; }
 
-function filter(){
-  const q=input.value.toLowerCase().trim();
-  let shown=0;
-  cards.forEach(c=>{
-    const ok=c.dataset.name.includes(q);
-    c.style.display=ok?'grid':'none';
-    if(ok) shown++;
+  // Mỗi game mới cần có data-added="YYYY-MM-DD" trên thẻ article.
+  // Tab Game mới hiển thị game được thêm trong 7 ngày gần đây (tính cả hôm nay).
+  function addedAt(card) {
+    const raw = card.dataset.added;
+    if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
+    const date = new Date(raw + 'T00:00:00');
+    return Number.isNaN(date.getTime()) ? null : date;
+  }
+  function isRecent(card) {
+    const date = addedAt(card);
+    if (!date) return false;
+    const age = today.getTime() - date.getTime();
+    return age >= 0 && age < SEVEN_DAYS_MS;
+  }
+  function gameKey(card) {
+    const link = card.querySelector('.play-btn');
+    return (link?.href || card.dataset.name || card.querySelector('h2')?.textContent || '').trim();
+  }
+  function countFor(card) { return Number(counts[gameKey(card)] || 0); }
+  function saveCounts() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(counts)); } catch (_) {}
+  }
+  function addStats(card) {
+    let stat = card.querySelector('.play-count');
+    if (!stat) {
+      stat = document.createElement('div');
+      stat.className = 'game-meta play-count';
+      stat.style.marginTop = '3px';
+      const content = card.querySelector('.game-content');
+      if (content) content.appendChild(stat);
+    }
+    stat.textContent = '🔥 ' + countFor(card).toLocaleString('vi-VN') + ' lượt chơi trên thiết bị này';
+  }
+  function updateTabCounts() {
+    document.getElementById('all-count').textContent = cards.length;
+    document.getElementById('recent-count').textContent = cards.filter(isRecent).length;
+    document.getElementById('old-count').textContent = cards.filter(c => !isRecent(c)).length;
+    document.getElementById('hot-count').textContent = cards.filter(c => countFor(c) > 0).length;
+  }
+  function filter() {
+    cards.forEach(card => { card.style.display = 'none'; });
+    const q = (input.value || '').toLocaleLowerCase('vi-VN').trim();
+    let list = [...cards];
+    if (activeTab === 'recent') list = list.filter(isRecent);
+    if (activeTab === 'old') list = list.filter(c => !isRecent(c));
+    if (activeTab === 'hot') list = list.sort((a,b) => countFor(b) - countFor(a));
+    else if (activeTab === 'recent') list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
+    list.forEach(card => {
+      const name = (card.dataset.name || card.querySelector('h2')?.textContent || '').toLocaleLowerCase('vi-VN');
+      card.style.display = name.includes(q) ? 'grid' : 'none';
+      addStats(card);
+    });
+    const visible = list.filter(card => card.style.display !== 'none').length;
+    empty.style.display = visible ? 'none' : 'block';
+    empty.textContent = activeTab === 'recent'
+      ? 'Chưa có game được đánh dấu thêm trong 7 ngày gần đây.'
+      : activeTab === 'hot'
+        ? 'Chưa có lượt chơi được ghi nhận trên trình duyệt này. Hãy chơi game để bắt đầu thống kê.'
+        : 'Không tìm thấy game phù hợp.';
+    // Reappend in selected order without changing the underlying game data.
+    list.forEach(card => grid.appendChild(card));
+    updateTabCounts();
+  }
+
+  cards.forEach(card => {
+    addStats(card);
+    const play = card.querySelector('.play-btn');
+    if (!play) return;
+    play.addEventListener('click', () => {
+      const key = gameKey(card);
+      counts[key] = countFor(card) + 1;
+      saveCounts();
+      addStats(card);
+      updateTabCounts();
+      // Khi đang xem Game hot, cập nhật thứ tự sau khi mở game.
+      if (activeTab === 'hot') setTimeout(filter, 0);
+    });
   });
-  empty.style.display=shown?'none':'block';
-}
-input.addEventListener('input',filter);
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    activeTab = tab.dataset.tab;
+    tabs.forEach(t => {
+      const active = t === tab;
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-pressed', String(active));
+    });
+    filter();
+  }));
+  input.addEventListener('input', filter);
+  updateTabCounts();
+  filter();
+})();
 </script>
 </body>
 </html>
