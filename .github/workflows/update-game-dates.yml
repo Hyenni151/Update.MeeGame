@@ -1,24 +1,20 @@
-
-name: Update game dates
+name: Stamp dates for newly added MeeGame links
 
 on:
   push:
-    branches:
-      - main
     paths:
-      - index.html
-      - scripts/stamp_game_dates.py
-      - .github/workflows/update-game-dates.yml
+      - "index.html"
+      - "scripts/stamp_game_dates.py"
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  update-dates:
+  stamp-dates:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Check out repository history
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -28,13 +24,17 @@ jobs:
         with:
           python-version: "3.x"
 
-      - name: Update game dates
+      - name: Add dates to new game cards
         run: python scripts/stamp_game_dates.py
 
-      - name: Commit changes
+      - name: Commit updated dates when needed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git diff --cached --quiet || git commit -m "Update game added dates"
-          git push
+          if git diff --quiet -- index.html; then
+            echo "No new game links need dates."
+          else
+            git add index.html
+            git commit -m "chore: stamp dates for newly added games"
+            git push
+          fi
