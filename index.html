@@ -663,8 +663,6 @@ a:focus-visible,input:focus-visible{
 <nav class="game-tabs" aria-label="Lọc danh sách game">
 <button type="button" class="game-tab active" data-tab="all" aria-pressed="true">🎮 Tất cả game <span class="tab-count" id="all-count">0</span></button>
 <button type="button" class="game-tab" data-tab="recent" aria-pressed="false">🆕 Game mới (7 ngày) <span class="tab-count" id="recent-count">0</span></button>
-<button type="button" class="game-tab" data-tab="old" aria-pressed="false">🗂️ Game cũ <span class="tab-count" id="old-count">0</span></button>
-<button type="button" class="game-tab" data-tab="hot" aria-pressed="false">🔥 Game hot <span class="tab-count" id="hot-count">0</span></button>
 </nav>
 <p class="stats-note" id="stats-note">Lượt chơi được ghi nhận trên trình duyệt này. Muốn thống kê chung cho tất cả khách truy cập, cần kết nối cơ sở dữ liệu online.</p>
 <section class="grid" id="grid">
@@ -1834,14 +1832,8 @@ a:focus-visible,input:focus-visible{
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
-  const STORAGE_KEY = 'meegame-play-counts-v1';
   let activeTab = 'all';
-  let counts = {};
-  try { counts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') || {}; }
-  catch (_) { counts = {}; }
 
-  // Mỗi game mới cần có data-added="YYYY-MM-DD" trên thẻ article.
-  // Tab Game mới hiển thị game được thêm trong 7 ngày gần đây (tính cả hôm nay).
   function addedAt(card) {
     const raw = card.dataset.added;
     if (!raw || !/^\d{4}-\d{2}-\d{2}$/.test(raw)) return null;
@@ -1854,70 +1846,30 @@ a:focus-visible,input:focus-visible{
     const age = today.getTime() - date.getTime();
     return age >= 0 && age < SEVEN_DAYS_MS;
   }
-  function gameKey(card) {
-    const link = card.querySelector('.play-btn');
-    return (link?.href || card.dataset.name || card.querySelector('h2')?.textContent || '').trim();
-  }
-  function countFor(card) { return Number(counts[gameKey(card)] || 0); }
-  function saveCounts() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(counts)); } catch (_) {}
-  }
-  function addStats(card) {
-    let stat = card.querySelector('.play-count');
-    if (!stat) {
-      stat = document.createElement('div');
-      stat.className = 'game-meta play-count';
-      stat.style.marginTop = '3px';
-      const content = card.querySelector('.game-content');
-      if (content) content.appendChild(stat);
-    }
-    stat.textContent = '🔥 ' + countFor(card).toLocaleString('vi-VN') + ' lượt chơi trên thiết bị này';
-  }
   function updateTabCounts() {
     document.getElementById('all-count').textContent = cards.length;
     document.getElementById('recent-count').textContent = cards.filter(isRecent).length;
-    document.getElementById('old-count').textContent = cards.filter(c => !isRecent(c)).length;
-    document.getElementById('hot-count').textContent = cards.filter(c => countFor(c) > 0).length;
   }
   function filter() {
     cards.forEach(card => { card.style.display = 'none'; });
     const q = (input.value || '').toLocaleLowerCase('vi-VN').trim();
     let list = [...cards];
-    if (activeTab === 'recent') list = list.filter(isRecent);
-    if (activeTab === 'old') list = list.filter(c => !isRecent(c));
-    if (activeTab === 'hot') list = list.sort((a,b) => countFor(b) - countFor(a));
-    else if (activeTab === 'recent') list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
+    if (activeTab === 'recent') {
+      list = list.filter(isRecent);
+      list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
+    }
     list.forEach(card => {
       const name = (card.dataset.name || card.querySelector('h2')?.textContent || '').toLocaleLowerCase('vi-VN');
       card.style.display = name.includes(q) ? 'grid' : 'none';
-      addStats(card);
     });
     const visible = list.filter(card => card.style.display !== 'none').length;
     empty.style.display = visible ? 'none' : 'block';
     empty.textContent = activeTab === 'recent'
       ? 'Chưa có game được đánh dấu thêm trong 7 ngày gần đây.'
-      : activeTab === 'hot'
-        ? 'Chưa có lượt chơi được ghi nhận trên trình duyệt này. Hãy chơi game để bắt đầu thống kê.'
-        : 'Không tìm thấy game phù hợp.';
-    // Reappend in selected order without changing the underlying game data.
+      : 'Không tìm thấy game phù hợp.';
     list.forEach(card => grid.appendChild(card));
     updateTabCounts();
   }
-
-  cards.forEach(card => {
-    addStats(card);
-    const play = card.querySelector('.play-btn');
-    if (!play) return;
-    play.addEventListener('click', () => {
-      const key = gameKey(card);
-      counts[key] = countFor(card) + 1;
-      saveCounts();
-      addStats(card);
-      updateTabCounts();
-      // Khi đang xem Game hot, cập nhật thứ tự sau khi mở game.
-      if (activeTab === 'hot') setTimeout(filter, 0);
-    });
-  });
   tabs.forEach(tab => tab.addEventListener('click', () => {
     activeTab = tab.dataset.tab;
     tabs.forEach(t => {
