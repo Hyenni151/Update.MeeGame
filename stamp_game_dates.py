@@ -1,104 +1,74 @@
 #!/usr/bin/env python3
-"""Stamp data-added=YYYY-MM-DD on newly added MeeGame cards in index.html.
+"""Stamp data-added on game cards whose play URL is new in this commit.
 
-The script compares the current index.html with the previous Git commit. Existing
-cards keep their dates; newly added play URLs receive today's date if they do not
-already have data-added. Legacy cards without dates remain legacy/old.
+Requires git history. Existing cards are not assigned fake dates. The script
+only stamps cards without data-added whose normalized play URL did not exist
+in the previous committed index.html.
 """
-from datetime import datetime
-from zoneinfo import ZoneInfo
-from pathlib import Path
+from __future__ import annotations
+import datetime as dt
 import re
 import subprocess
-import sys
-from urllib.parse import urlsplit, urlunsplit
+from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-HTML_PATH = ROOT / "index.html"
-CARD_RE = re.compile(
-    r'(?P<open><article\b(?=[^>]*\bclass=["\'][^"\']*\bgame-card\b[^"\']*["\'])[^>]*>)'
-    r'(?P<body>.*?)'
-    r'(?P<close></article\s*>)',
-    re.IGNORECASE | re.DOTALL,
-)
-PLAY_RE = re.compile(
-    r'<a\b(?=[^>]*\bclass=["\'][^"\']*\bplay-btn\b[^"\']*["\'])[^>]*\bhref=["\']([^"\']+)["\'][^>]*>',
-    re.IGNORECASE | re.DOTALL,
-)
+INDEX = Path("index.html")
+CARD_RE = re.compile(r'<article\b(?P<attrs>[^>]*\bclass\s*=\s*["\'][^"\']*\bgame-card\b[^"\']*["\'][^>]*)>(?P<body>.*?)</article\s*>', re.I | re.S)
+HREF_RE = re.compile(r'<a\b(?=[^>]*\bclass\s*=\s*["\'][^"\']*\bplay-btn\b[^"\']*["\'])[^>]*\bhref\s*=\s*(["\'])(.*?)\1', re.I | re.S)
+DATE_RE = re.compile(r'\bdata-added\s*=\s*(["\']).*?\1', re.I | re.S)
 
 
-def canonical_url(url: str) -> str:
-    """Normalize enough URL variation to avoid treating trailing slash as new."""
-    url = url.strip()
-    try:
-        p = urlsplit(url)
-        host = (p.hostname or "").lower()
-        if p.port:
-            host += f":{p.port}"
-        path = p.path.rstrip("/") or "/"
-        return urlunsplit((p.scheme.lower(), host, path, p.query, ""))
-    except ValueError:
-        return url
+def normalize_url(url: str) -> str:
+    url = url.strip().replace('&amp;', '&')
+    url = re.sub(r'#.*$', '', url)
+    # Treat a trailing slash as equivalent for host-root links only.
+    return url.rstrip('/') if re.match(r'^https?://[^/]+/$', url, re.I) else url
 
 
 def urls_in(html: str) -> set[str]:
-    found: set[str] = set()
-    for match in CARD_RE.finditer(html):
-        play = PLAY_RE.search(match.group(0))
-        if play:
-            found.add(canonical_url(play.group(1)))
+    found = set()
+    for m in CARD_RE.finditer(html):
+        link = HREF_RE.search(m.group('body'))
+        if link:
+            found.add(normalize_url(link.group(2)))
     return found
 
 
-def previous_html() -> str:
-    result = subprocess.run(
-        ["git", "show", "HEAD^:index.html"],
-        cwd=ROOT,
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.DEVNULL,
-        check=False,
-    )
-    return result.stdout if result.returncode == 0 else ""
+def previous_html() -> str | None:
+    for rev in ("HEAD^:index.html", "HEAD~1:index.html"):
+        p = subprocess.run(["git", "show", rev], capture_output=True, text=True, encoding="utf-8")
+        if p.returncode == 0:
+            return p.stdout
+    return None
 
 
-def main() -> int:
-    if not HTML_PATH.exists():
-        print("ERROR: index.html not found at repository root", file=sys.stderr)
-        return 2
+def main() -> None:
+    if not INDEX.exists():
+        raise SystemExit("Không tìm thấy index.html ở thư mục gốc repository.")
+    current = INDEX.read_text(encoding="utf-8")
+    previous = previous_html()
+    if previous is None:
+        print("Không có bản index.html trước đó; giữ nguyên ngày để tránh đánh dấu sai toàn bộ game.")
+        return
+    old_urls = urls_in(previous)
+    today = dt.datetime.now(dt.timezone.utc).date().isoformat()
+    changed = 0
 
-    current = HTML_PATH.read_text(encoding="utf-8")
-    previous_urls = urls_in(previous_html())
-    today = datetime.now(ZoneInfo("Asia/Ho_Chi_Minh")).date().isoformat()
-    added_count = 0
+    def patch_card(match: re.Match[str]) -> str:
+        nonlocal changed
+        attrs, body = match.group('attrs'), match.group('body')
+        link = HREF_RE.search(body)
+        if not link:
+            return match.group(0)
+        url = normalize_url(link.group(2))
+        if DATE_RE.search(attrs) or url in old_urls:
+            return match.group(0)
+        changed += 1
+        return '<article' + attrs + f' data-added="{today}">' + body + '</article>'
 
-    def update_card(match: re.Match[str]) -> str:
-        nonlocal added_count
-        opening = match.group("open")
-        body = match.group("body")
-        whole = match.group(0)
-        play = PLAY_RE.search(whole)
-        if not play:
-            return whole
-        url = canonical_url(play.group(1))
-        if url in previous_urls:
-            return whole
-        # Do not overwrite an explicit date supplied by the editor.
-        if re.search(r'\bdata-added=["\']\d{4}-\d{2}-\d{2}["\']', opening, re.I):
-            return whole
-        opening = opening[:-1].rstrip() + f' data-added="{today}">'
-        added_count += 1
-        return opening + body + match.group("close")
-
-    updated = CARD_RE.sub(update_card, current)
+    updated = CARD_RE.sub(patch_card, current)
     if updated != current:
-        HTML_PATH.write_text(updated, encoding="utf-8", newline="")
-    print(f"Date: {today}")
-    print(f"Previously known game links: {len(previous_urls)}")
-    print(f"New game cards stamped: {added_count}")
-    print(f"Updated index.html: {'yes' if updated != current else 'no'}")
-    return 0
+        INDEX.write_text(updated, encoding="utf-8", newline="")
+    print(f"Đã gắn ngày {today} cho {changed} game mới.")
 
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+if __name__ == '__main__':
+    main()
