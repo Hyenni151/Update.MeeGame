@@ -1,40 +1,39 @@
-name: Stamp dates for newly added MeeGame links
+name: Mark newly added games
 
 on:
   push:
+    branches: [main, master]
     paths:
-      - "index.html"
-      - "scripts/stamp_game_dates.py"
+      - 'index.html'
+      - 'scripts/stamp_game_dates.py'
   workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: mark-new-games
+  cancel-in-progress: false
+
 jobs:
   stamp-dates:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository history
+      - name: Checkout full history
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Add dates to new game cards
-        run: python scripts/stamp_game_dates.py
-
-      - name: Commit updated dates when needed
+      - name: Stamp dates on new game cards
+        run: python3 scripts/stamp_game_dates.py
+      - name: Commit date updates if needed
         run: |
+          if git diff --quiet -- index.html; then
+            echo "No new game cards to stamp."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet -- index.html; then
-            echo "No new game links need dates."
-          else
-            git add index.html
-            git commit -m "chore: stamp dates for newly added games"
-            git push
-          fi
+          git add index.html
+          git commit -m "Mark newly added games [skip ci]"
+          git push
