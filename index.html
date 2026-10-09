@@ -1735,7 +1735,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="rao">
+<article class="game-card" data-name="rao" data-added="2026-10-09">
 <div class="game-number">92</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Rao" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1749,7 +1749,7 @@ a:focus-visible,input:focus-visible{
 </a>
 </article>
 
-<article class="game-card" data-name="tâm lý học">
+<article class="game-card" data-name="tâm lý học" data-added="2026-10-09">
 <div class="game-number">93</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tâm lý học" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1763,7 +1763,7 @@ a:focus-visible,input:focus-visible{
 </a>
 </article>
 
-<article class="game-card" data-name="hoa giấy">
+<article class="game-card" data-name="hoa giấy" data-added="2026-10-09">
 <div class="game-number">94</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Hoa giấy" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1777,7 +1777,7 @@ a:focus-visible,input:focus-visible{
 </a>
 </article>
 
-<article class="game-card" data-name="thung lũng sao rơi">
+<article class="game-card" data-name="thung lũng sao rơi" data-added="2026-10-09">
 <div class="game-number">95</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Thung Lũng Sao Rơi" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1790,7 +1790,7 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="chăn trâu">
+<article class="game-card" data-name="chăn trâu" data-added="2026-10-09">
 <div class="game-number">96</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Chăn trâu" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
                                               this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
@@ -1826,7 +1826,10 @@ a:focus-visible,input:focus-visible{
   const tabs = [...document.querySelectorAll('.game-tab')];
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const SEVEN_DAYS_MS = 7 * 24 * 60 * 60 * 1000;
+  // Game mới: mọi thẻ có data-added từ 06/09/2026 đến ngày hiện tại.
+  // GitHub Actions tự gắn data-added cho thẻ mới khi index.html được push.
+  const RECENT_START = new Date('2026-09-06T00:00:00');
+  RECENT_START.setHours(0, 0, 0, 0);
   let activeTab = 'all';
   let counts = {};
   const pending = new Set();
@@ -1840,8 +1843,7 @@ a:focus-visible,input:focus-visible{
   function isRecent(card) {
     const date = addedAt(card);
     if (!date) return false;
-    const age = today.getTime() - date.getTime();
-    return age >= 0 && age < SEVEN_DAYS_MS;
+    return date.getTime() >= RECENT_START.getTime() && date.getTime() <= today.getTime();
   }
   function gameKey(card) {
     const link = card.querySelector('.play-btn');
@@ -1882,7 +1884,7 @@ a:focus-visible,input:focus-visible{
     const visible = list.filter(card => card.style.display !== 'none').length;
     empty.style.display = visible ? 'none' : 'block';
     empty.textContent = activeTab === 'recent'
-      ? 'Chưa có game được đánh dấu thêm trong 7 ngày gần đây.'
+      ? 'Chưa có game nào được thêm từ ngày 06/09/2026 đến hôm nay.'
       : activeTab === 'hot'
         ? (supabaseReady ? 'Chưa có lượt mở link nào được ghi nhận. Hãy mở game để bắt đầu thống kê.' : 'Cần cấu hình Supabase để Game hot xếp hạng theo lượt mở link trên mọi thiết bị. Xem README_SETUP.txt trong gói tải về.')
         : 'Không tìm thấy game phù hợp.';
