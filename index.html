@@ -1864,7 +1864,7 @@ a:focus-visible,input:focus-visible{
     <div class="side-stats stats-legacy">
       <div class="stat-box"><span class="stat-emoji">🎮</span><span class="stat-number" id="stat-total-games">0</span><span class="stat-label">Tổng game</span></div>
       <div class="stat-box"><span class="stat-emoji">🔥</span><span class="stat-number" id="stat-total-plays">0</span><span class="stat-label">Lượt bấm</span></div>
-      <div class="stat-box"><span class="stat-emoji">✨</span><span class="stat-number" id="stat-hot-games">0</span><span class="stat-label">Game đã chơi</span></div>
+      <div class="stat-box"><span class="stat-emoji">👥</span><span class="stat-number" id="stat-visitors">0</span><span class="stat-label">Truy cập web</span></div>
     </div>
     <p class="side-hint" id="stats-status">Số liệu sẽ hiển thị sau khi tải dữ liệu thống kê.</p>
   </section>
@@ -1900,6 +1900,7 @@ a:focus-visible,input:focus-visible{
   RECENT_START.setHours(0, 0, 0, 0);
   let activeTab = 'all';
   let counts = {};
+  let visitorCount = 0;
   const pending = new Set();
 
   function addedAt(card) {
@@ -1935,8 +1936,8 @@ a:focus-visible,input:focus-visible{
     const recent = cards.filter(isRecent).length;
     document.getElementById('stat-total-games').textContent = cards.length.toLocaleString('vi-VN');
     document.getElementById('stat-total-plays').textContent = total.toLocaleString('vi-VN');
-    document.getElementById('stat-hot-games').textContent = cards.filter(c=>countFor(c)>0).length.toLocaleString('vi-VN');
-    document.getElementById('stats-status').textContent = supabaseReady ? 'Đã kết nối Supabase' : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
+    document.getElementById('stat-visitors').textContent = visitorCount.toLocaleString('vi-VN');
+    document.getElementById('stats-status').textContent = supabaseReady ? 'Đã kết nối Supabase · cập nhật tự động' : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
     const list=document.getElementById('hot-list');
     const top=hotRankedCards().slice(0,3);
     list.replaceChildren();
@@ -2000,6 +2001,67 @@ a:focus-visible,input:focus-visible{
     list.forEach(card => grid.appendChild(card));
     updateTabCounts();
   }
+  // Đếm người truy cập duy nhất theo trình duyệt (một mã ẩn danh lưu trên thiết bị).
+  // Tổng số được lấy từ Supabase và làm mới định kỳ, không phải số game đã chơi.
+  function getVisitorId() {
+    const key = 'meegame_visitor_id_v1';
+    try {
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = (window.crypto && typeof crypto.randomUUID === 'function')
+          ? crypto.randomUUID()
+          : 'v-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    } catch (_) {
+      return 'session-' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    }
+  }
+  async function registerVisitor() {
+    if (!supabaseReady) return;
+    try {
+      const url = SUPABASE_URL.replace(/\/$/, '');
+      const id = getVisitorId();
+      const saved = await fetch(url + '/rest/v1/site_visitors?on_conflict=visitor_id', {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          Prefer: 'resolution=merge-duplicates,return=minimal'
+        },
+        body: JSON.stringify({ visitor_id: id, last_seen: new Date().toISOString() }),
+        keepalive: true
+      });
+      if (!saved.ok) throw new Error('Could not register visitor: ' + saved.status);
+      await refreshVisitorCount();
+    } catch (err) {
+      console.warn('MeeGame visitor count could not update:', err);
+      const status = document.getElementById('stats-status');
+      if (status) status.textContent = 'Không tải được số người truy cập. Kiểm tra bảng site_visitors trong Supabase.';
+    }
+  }
+  async function refreshVisitorCount() {
+    if (!supabaseReady) return;
+    const res = await fetch(SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/site_visitors?select=visitor_id', {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+        Prefer: 'count=exact',
+        Range: '0-0'
+      },
+      cache: 'no-store'
+    });
+    if (!res.ok) throw new Error('Could not refresh visitor count: ' + res.status);
+    const range = res.headers.get('content-range') || '';
+    const match = range.match(/\/(\d+)$/);
+    if (match) {
+      visitorCount = Number(match[1]) || 0;
+      document.getElementById('stat-visitors').textContent = visitorCount.toLocaleString('vi-VN');
+    }
+  }
+
   async function loadGlobalCounts() {
     if (!supabaseReady) { filter(); return; }
     try {
@@ -2061,6 +2123,9 @@ a:focus-visible,input:focus-visible{
   updateTabCounts();
   filter();
   loadGlobalCounts();
+  registerVisitor();
+  // Đồng bộ số người truy cập đang được ghi nhận mỗi 30 giây.
+  window.setInterval(() => { refreshVisitorCount().catch(err => console.warn('MeeGame visitor refresh failed:', err)); }, 30000);
 })();
 </script>
 </body>
