@@ -1937,7 +1937,7 @@ a:focus-visible,input:focus-visible{
     document.getElementById('stat-total-games').textContent = cards.length.toLocaleString('vi-VN');
     document.getElementById('stat-total-plays').textContent = total.toLocaleString('vi-VN');
     document.getElementById('stat-visitors').textContent = visitorCount.toLocaleString('vi-VN');
-    document.getElementById('stats-status').textContent = supabaseReady ? 'Được thực hiện toàn bộ từ Như Huyền · cập nhật tự động' : 'Được thực hiện toàn bộ từ Như Huyền.';
+    document.getElementById('stats-status').textContent = supabaseReady ? 'Được thực hiện toàn bộ từ Như Huyền' : 'Được thực hiện toàn bộ từ Như Huyền.';
     const list=document.getElementById('hot-list');
     const top=hotRankedCards().slice(0,3);
     list.replaceChildren();
