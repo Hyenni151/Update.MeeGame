@@ -690,8 +690,7 @@ a:focus-visible,input:focus-visible{
 <div class="hero-main">
 <span class="kicker">𝗠𝗲𝗲𝗚𝗮𝗺𝗲</span>
 <h1>UPDATE GAME WEB</h1>
-<p><i>Các link được tổng hợp từ nhiều nguồn khác nhau và được team MeeGame tổng hợp lại.
-      Trân trọng!</i></p>
+<p><i>Các link được tổng hợp từ nhiều nguồn khác nhau và được team MeeGame tổng hợp lại.Trân trọng!</i></p>
 </div>
 </section>
 <div class="toolbar">
@@ -1872,7 +1871,7 @@ a:focus-visible,input:focus-visible{
   <section class="side-panel">
     <h2 class="side-title">🔥 Top game hot</h2>
     <div class="hot-list" id="hot-list"><div class="side-hint">Đang tải thứ hạng game…</div></div>
-    <p class="side-hint"> </p>
+    <p class="side-hint"></p>
   </section>
 </aside>
 </div>
@@ -1937,7 +1936,7 @@ a:focus-visible,input:focus-visible{
     document.getElementById('stat-total-games').textContent = cards.length.toLocaleString('vi-VN');
     document.getElementById('stat-total-plays').textContent = total.toLocaleString('vi-VN');
     document.getElementById('stat-hot-games').textContent = cards.filter(c=>countFor(c)>0).length.toLocaleString('vi-VN');
-    document.getElementById('stats-status').textContent = supabaseReady ? : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
+    document.getElementById('stats-status').textContent = supabaseReady ? 'Đã kết nối cấu hình Supabase; lượt chơi được đồng bộ khi API và quyền truy cập hoạt động.' : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
     const list=document.getElementById('hot-list');
     const top=hotRankedCards().slice(0,3);
     list.replaceChildren();
