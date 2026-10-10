@@ -207,7 +207,7 @@ body::before{
   outline:none;
   background:var(--paper);
   color:var(--brown);
-  font-size:14px;
+  font-size:16px; /* >=16px prevents automatic focus zoom on iOS */
   font-weight:700;
   box-shadow:0 6px 18px rgba(74,37,27,.05);
 }
@@ -503,12 +503,11 @@ body::before{opacity:.11;background-size:27px 27px}
   border-color:rgba(119,79,45,.16);
   background:rgba(255,253,248,.9);
   box-shadow:0 8px 24px rgba(74,37,27,.045),inset 0 1px 0 #fff;
-  transition:border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+  transition:border-color .15s ease,box-shadow .15s ease;
 }
 #search:focus{
   border-color:#e6b943;
   box-shadow:0 0 0 4px rgba(255,214,107,.22),0 12px 28px rgba(74,37,27,.07);
-  transform:translateY(-1px);
 }
 .sort{
   min-height:54px;
@@ -705,10 +704,20 @@ a:focus-visible,input:focus-visible{
 .settings-close{width:100%;border:0;border-radius:12px;padding:12px;background:var(--brown);color:white;font-weight:900;cursor:pointer;margin-top:5px}
 body.dark-mode{--cream:#171412;--paper:#24201d;--yellow:#59421b;--yellow-deep:#bd8422;--brown:#f7eadb;--brown-2:#e7c4a4;--brown-3:#c5a28b;--line:#514239;--soft:#382d26;--shadow:0 12px 35px rgba(0,0,0,.28);--shadow-hover:0 18px 42px rgba(0,0,0,.4);background:#171412;color:var(--brown)}
 body.dark-mode .topbar,body.dark-mode .game-card,body.dark-mode .side-panel,body.dark-mode .toolbar,body.dark-mode .search-wrap,body.dark-mode .game-tab,body.dark-mode .sort{background:var(--paper);color:var(--brown);border-color:var(--line)}
+@media (max-width: 768px){#search{font-size:16px!important;transform:none!important;transition:none!important}#search:focus{transform:none!important;box-shadow:0 0 0 2px rgba(255,214,107,.22)!important}}
 body.dark-mode .hero-main{background:#302018}
 body.dark-mode .play-btn,body.dark-mode .total-pill{background:#7a422b;color:#fff}
 body.dark-mode input{background:transparent;color:var(--brown)}
 @media(max-width:600px){.settings-launcher{top:9px;left:9px;width:42px;height:42px}.settings-panel{top:58px;left:9px}.topbar{margin-top:62px}}
+
+
+/* Responsive catalog ordering: on phones, stats and hot ranking come first. */
+@media(max-width:620px){
+  .catalog-main > .toolbar{width:100%;margin:0 0 10px;gap:8px}
+  .catalog-main > .toolbar .search-wrap{min-width:0;flex:1}
+  .catalog-main > .game-tabs{width:100%;margin:0 0 12px;flex-wrap:wrap}
+  .catalog-main > .stats-note{width:100%;margin:0 0 10px}
+}
 
 </style>
 </head>
@@ -741,6 +750,7 @@ body.dark-mode input{background:transparent;color:var(--brown)}
 <p><i>Các link được tổng hợp từ nhiều nguồn khác nhau và được team MeeGame tổng hợp lại.<br>Cảm ơn các tình yêu đã ủng hộ!</i></p>
 </div>
 </section>
+<div id="toolbar-home"></div>
 <div class="toolbar">
 <div class="search-wrap">
 <span>⌕</span>
@@ -2333,7 +2343,11 @@ body.dark-mode input{background:transparent;color:var(--brown)}
     });
     filter();
   }));
-  input.addEventListener('input', filter);
+  let searchDebounce;
+  input.addEventListener('input', () => {
+    clearTimeout(searchDebounce);
+    searchDebounce = setTimeout(filter, 110);
+  });
   updateTabCounts();
   filter();
   loadGlobalCounts();
@@ -2342,5 +2356,36 @@ body.dark-mode input{background:transparent;color:var(--brown)}
   window.setInterval(() => { refreshVisitorCount().catch(err => console.warn('MeeGame visitor refresh failed:', err)); }, 30000);
 })();
 </script>
+
+<script>
+// On mobile, place search and game tabs below the stats and Top Hot Games panels.
+(function(){
+  const toolbar = document.querySelector('.toolbar');
+  const tabs = document.querySelector('.game-tabs');
+  const note = document.querySelector('.stats-note');
+  const layout = document.querySelector('.catalog-layout');
+  const main = document.querySelector('.catalog-main');
+  const home = document.getElementById('toolbar-home');
+  if (!toolbar || !tabs || !note || !layout || !main || !home) return;
+  const mobile = window.matchMedia('(max-width: 620px)');
+  function placeControls(){
+    if (mobile.matches) {
+      // Insert in the intended order immediately before the game grid.
+      main.insertBefore(toolbar, main.firstChild);
+      main.insertBefore(tabs, toolbar.nextSibling);
+      main.insertBefore(note, tabs.nextSibling);
+    } else {
+      // Restore the desktop layout without recreating or resetting any controls.
+      layout.parentNode.insertBefore(toolbar, layout);
+      layout.parentNode.insertBefore(tabs, layout);
+      layout.parentNode.insertBefore(note, layout);
+    }
+  }
+  placeControls();
+  if (mobile.addEventListener) mobile.addEventListener('change', placeControls);
+  else if (mobile.addListener) mobile.addListener(placeControls);
+})();
+</script>
+
 </body>
 </html>
