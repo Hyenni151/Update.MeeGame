@@ -632,6 +632,47 @@ a:focus-visible,input:focus-visible{
 .stats-note{width:min(1180px,calc(100% - 32px));margin:9px auto 0;color:var(--brown-3);font-size:11px;line-height:1.45}
 @media(max-width:620px){.game-tabs{width:calc(100% - 20px);margin-top:12px}.game-tab{padding:10px 13px;font-size:12px}}
 
+
+/* MeeGame refresh: two-column catalog and warm playful details */
+.catalog-layout{width:min(1240px,calc(100% - 32px));margin:18px auto 0;display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:20px;align-items:start}
+.catalog-main{min-width:0}
+.catalog-main .grid{width:100%;margin:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.catalog-main .empty{width:100%;margin:16px auto}
+.game-card{overflow:hidden}
+.game-card::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,var(--yellow),#F29A50);opacity:.8}
+.game-card .game-icon{overflow:hidden}
+.game-cover{transition:transform .25s ease}
+.game-card:hover .game-cover{transform:scale(1.07)}
+.game-badges{position:absolute;right:12px;top:10px;display:flex;gap:5px;z-index:2}
+.game-badge{font-size:9px;font-weight:950;letter-spacing:.4px;padding:5px 8px;border-radius:999px;box-shadow:0 3px 8px #4a251b12}
+.game-badge.new{background:#DDF5D7;color:#27633A}
+.game-badge.hot{background:#FFE1D1;color:#A84019}
+.game-content h2{padding-right:64px}
+.play-count{font-size:10px!important;font-weight:800!important;color:var(--brown-3)!important}
+.game-sidebar{position:sticky;top:16px;display:grid;gap:14px}
+.side-panel{border:1px solid var(--line);border-radius:24px;padding:17px;background:rgba(255,253,247,.96);box-shadow:var(--shadow)}
+.side-title{margin:0 0 12px;font-size:15px;font-weight:950;display:flex;align-items:center;gap:8px}
+.side-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stats-legacy{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stats-legacy .stat-box{text-align:center;background:#fff;border-color:#f0ddc2;padding:12px 6px}
+.stat-emoji{display:block;font-size:20px;margin-bottom:5px}
+.stats-legacy .stat-number{font-size:19px}
+.stats-legacy .stat-label{font-size:10px}
+.stat-box{padding:12px;border-radius:16px;background:#FFF4D5;border:1px solid #F2E0B4}
+.stat-number{display:block;font-size:22px;font-weight:950;line-height:1.2;color:var(--brown)}
+.stat-label{display:block;font-size:10px;font-weight:750;color:var(--brown-3);margin-top:4px}
+.hot-list{display:grid;gap:9px}
+.hot-item{display:grid;grid-template-columns:28px 48px minmax(0,1fr) auto;align-items:center;gap:8px;padding:9px;border-radius:14px;background:#FFFAEE;border:1px solid #F3E7D1}
+.hot-cover{width:48px;height:38px;object-fit:cover;border-radius:8px;background:#f7e8c8;border:1px solid #f0dfc4}
+.hot-item .hot-name{min-width:0}
+@media(max-width:400px){.hot-item{grid-template-columns:27px 40px minmax(0,1fr);gap:6px}.hot-cover{width:40px;height:34px}.hot-count{grid-column:3;justify-self:start}}
+.hot-rank{width:27px;height:27px;border-radius:9px;display:grid;place-items:center;background:#FFE3A1;font-size:11px;font-weight:950}
+.hot-name{font-size:11px;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hot-count{font-size:10px;font-weight:850;color:#A65A28;white-space:nowrap}
+.side-hint{font-size:10px;line-height:1.5;color:var(--brown-3);margin:10px 0 0}
+@media(max-width:900px){.catalog-layout{grid-template-columns:minmax(0,1fr) 230px;gap:13px}.catalog-main .grid{grid-template-columns:1fr}.side-panel{padding:13px}}
+@media(max-width:680px){.catalog-layout{width:calc(100% - 20px);grid-template-columns:1fr}.game-sidebar{position:static;grid-template-columns:1fr}.catalog-main .grid{grid-template-columns:1fr}.game-content h2{padding-right:0}.game-sidebar .side-panel:first-child{order:0}}
+
 </style>
 </head>
 <body>
@@ -663,9 +704,11 @@ a:focus-visible,input:focus-visible{
 <nav class="game-tabs" aria-label="Lọc danh sách game">
 <button type="button" class="game-tab active" data-tab="all" aria-pressed="true">🎮 Tất cả game <span class="tab-count" id="all-count">0</span></button>
 <button type="button" class="game-tab" data-tab="recent" aria-pressed="false">📣 Game mới <span class="tab-count" id="recent-count">0</span></button>
-<button type="button" class="game-tab" data-tab="hot" aria-pressed="false">🔥 Game hot <span class="tab-count" id="hot-count">0</span></button>
+<button type="button" class="game-tab" data-tab="hot" aria-pressed="false">🔥 Game hot <span class="tab-count" id="hot-count">8</span></button>
 </nav>
 <p class="stats-note" id="stats-note"></p>
+<div class="catalog-layout">
+<div class="catalog-main">
 <section class="grid" id="grid">
 <article class="game-card" data-name="a bit saigon">
 <div class="game-number">01</div>
@@ -726,6 +769,19 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
+<article class="game-card" data-added="2026-10-06" data-name="cây kéo thần,cắt tóc">
+<div class="game-number">88</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cây kéo thần" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fcay-keo-than?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Cây kéo thần</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://joyup.vn/game/cay-keo-than" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 <article class="game-card" data-name="chân gà sốt thái">
 <div class="game-number">06</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Chân gà" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fchan-ga-sot-thai?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">C</span></div>
@@ -734,6 +790,19 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://joyup.vn/game/chan-ga-sot-thai" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="chăn trâu" data-added="2026-10-09">
+<div class="game-number">96</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Chăn trâu" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src=" https://s.wordpress.com/mshots/v1/https%3A%2F%2Fnuoibo3d.vietcode.io.vn%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Chăn trâu</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://nuoibo3d.vietcode.io.vn/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -855,27 +924,16 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="đám cưới chuột">
-<div class="game-number">17</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đám cưới chuột" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                            this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                            src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdamcuoichuot.com%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<article class="game-card" data-name="cuộc sống đô thị">
+<div class="game-number">78</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cuộc sống đô thị" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fcsdt.io.vn%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
 <div class="game-content">
-<h2>Đám cưới chuột</h2>
+<h2>Cuộc sống đô thị</h2>
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
-<a class="play-btn" href="https://damcuoichuot.com" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-name="đế chế vỉ hè">
-<div class="game-number">18</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đế chế vỉ hè" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fde-che-via-he.pages.dev%2F%3F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Đ</span></div>
-<div class="game-content">
-<h2>Đế chế vỉa hè</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://decheviahe.com" rel="noopener noreferrer" target="_blank">
+<a class="play-btn" href="https://csdt.io.vn" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -947,6 +1005,19 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
+<article class="game-card" data-name="hoa giấy" data-added="2026-10-09">
+<div class="game-number">94</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Hoa giấy" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Flufutu.itch.io%2Fhoa-giay?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Hoa giấy</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://lufutu.itch.io/hoa-giay" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 <article class="game-card" data-name="hũ tiếu gõ">
 <div class="game-number">25</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Hũ tiếu gõ" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fhutieugamevercelv3.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">H</span></div>
@@ -979,6 +1050,19 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://kinhdoanhdothii.vercel.app" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="làng vũ đại" data-added="2026-10-08">
+<div class="game-number">84</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Làng Vũ Đại" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Flangvudai.fun%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Làng Vũ Đại</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://langvudai.fun/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1060,6 +1144,19 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://hhuync.github.io/mot-o-nha/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="một đời an nhiên" data-added="2026-10-07">
+<div class="game-number">79</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Một đời an nhiên" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmotdoianyen.com%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Một đời an nhiên</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://motdoianyen.com/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1209,6 +1306,32 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
+<article class="game-card" data-added="2026-10-06" data-name="quần áo, shop quần áo, tiệm thời  ">
+<div class="game-number">89</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cây kéo thần" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmy-little-boutique.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Tiệm thời trang </h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://my-little-boutique.vercel.app/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-added="2026-10-06" data-name="quán nhậu">
+<div class="game-number">86</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Quán Nhậu" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fquannhau24h.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Quán Nhậu 24g</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://quannhau24h.vercel.app/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 <article class="game-card" data-name="quán nhỏ miền trung">
 <div class="game-number">48</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Quán nhỏ miền trung" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fquananmientrung-vn.pages.dev%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Q</span></div>
@@ -1244,6 +1367,32 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
+<article class="game-card" data-name="quầy số 1" data-added="2026-10-07">
+<div class="game-number">82</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Quầy Số 1" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fgiao-dich-vien?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Quầy Số 1</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://joyup.vn/game/giao-dich-vien" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="rao" data-added="2026-10-09">
+<div class="game-number">92</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Rao" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Frao-game.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Rao</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://rao-game.vercel.app" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 <article class="game-card" data-name="saigonesee">
 <div class="game-number">51</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa SAIGONESEE" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fsaigoneseecoffee.github.io%2Fsaigonesee-game%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">S</span></div>
@@ -1276,6 +1425,45 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://spabaton.vercel.app/?zarsrc=1303&amp;utm_source=zalo&amp;utm_medium=zalo&amp;utm_campaign=zalo" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="tâm lý học" data-added="2026-10-09">
+<div class="game-number">93</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tâm lý học" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fnghe-ne?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Tâm lý học</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://joyup.vn/game/nghe-ne" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-added="2026-10-06" data-name="thị trấn nhỏ">
+<div class="game-number">91</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Thị trấn nhỏ" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fthitrannho.com%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Thị trấn nhỏ</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://thitrannho.com/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="thung lũng sao rơi" data-added="2026-10-09">
+<div class="game-number">95</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Thung Lũng Sao Rơi" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fstarfall-valley.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Thung Lũng Sao Rơi</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://starfall-valley.vercel.app/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1320,6 +1508,19 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://joyup.vn/game/tiem-banh-nang-mai" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="tiệm bé chì, tiệm sách">
+<div class="game-number">80</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tiệm bé chì" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Ftime-be-chi?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Tiệm bé chì</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://joyup.vn/game/time-be-chi" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1416,17 +1617,6 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="tiệm trà ước mơ">
-<div class="game-number">66</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tiệm trà " class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Ftiemtramouoc.tensorship.tech%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Tiệm trà Ước Mơ</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="http://tiemtramouoc.tensorship.tech" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
 <article class="game-card" data-name="tiệm trà mì bất ổn">
 <div class="game-number">67</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tiệm trà mì bất ổn" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Ftiemtramibaton.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">T</span></div>
@@ -1438,6 +1628,17 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
+<article class="game-card" data-name="tiệm trà ước mơ">
+<div class="game-number">66</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tiệm trà " class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Ftiemtramouoc.tensorship.tech%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Tiệm trà Ước Mơ</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="http://tiemtramouoc.tensorship.tech" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 <article class="game-card" data-name="tiệm xôi bà tám">
 <div class="game-number">68</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tiệm xôi bà Tám" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Ftiemxoibatam.io.vn%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">T</span></div>
@@ -1446,17 +1647,6 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://tiemxoibatam.io.vn/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-name="trà đá">
-<div class="game-number">69</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Trà đá" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fkhoi-nghiep-tra-da.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">T</span></div>
-<div class="game-content">
-<h2>Trà đá</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://khoi-nghiep-tra-da.vercel.app/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1479,6 +1669,30 @@ a:focus-visible,input:focus-visible{
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
 <a class="play-btn" href="https://cai-tiem-tra-sua.minas-it.online/?zarsrc=1303&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-added="2026-10-06" data-name="trà và chuyện nhỏ">
+<div class="game-number">87</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Trà và chuyện nhỏ" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fhee-game.lovsy.top%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Trà và chuyện nhỏ</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://hee-game.lovsy.top/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="trà đá">
+<div class="game-number">69</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Trà đá" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fkhoi-nghiep-tra-da.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">T</span></div>
+<div class="game-content">
+<h2>Trà đá</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://khoi-nghiep-tra-da.vercel.app/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1528,6 +1742,32 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
+<article class="game-card" data-name="viral ơi, maketing" data-added="2026-10-07">
+<div class="game-number">81</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Viral ơi" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fgame-marketing?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Viral ơi</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://joyup.vn/game/game-marketing" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-name="xóm nông trại" data-added="2026-10-08">
+<div class="game-number">83</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Xóm Nông Trại" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fnongtrai.jackle.dev%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Xóm Nông Trại</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://nongtrai.jackle.dev/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 <article class="game-card" data-name="xóm nước dừa">
 <div class="game-number">76</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Xóm nước Dừa" class="game-cover" loading="lazy" onerror="this.style.display='none';
@@ -1553,97 +1793,6 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-<article class="game-card" data-name="cuộc sống đô thị">
-<div class="game-number">78</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cuộc sống đô thị" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fcsdt.io.vn%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Cuộc sống đô thị</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://csdt.io.vn" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-name="một đời an nhiên" data-added="2026-10-07">
-<div class="game-number">79</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Một đời an nhiên" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmotdoianyen.com%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Một đời an nhiên</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://motdoianyen.com/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>   
-<article class="game-card" data-name="tiệm bé chì, tiệm sách">
-<div class="game-number">80</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tiệm bé chì" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Ftime-be-chi?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Tiệm bé chì</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://joyup.vn/game/time-be-chi" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article> 
-<article class="game-card" data-name="viral ơi, maketing" data-added="2026-10-07">
-<div class="game-number">81</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Viral ơi" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fgame-marketing?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Viral ơi</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://joyup.vn/game/game-marketing" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article> 
-<article class="game-card" data-name="quầy số 1" data-added="2026-10-07">
-<div class="game-number">82</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Quầy Số 1" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fgiao-dich-vien?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Quầy Số 1</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://joyup.vn/game/giao-dich-vien" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article> 
-<article class="game-card" data-name="xóm nông trại" data-added="2026-10-08">
-<div class="game-number">83</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Xóm Nông Trại" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fnongtrai.jackle.dev%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Xóm Nông Trại</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://nongtrai.jackle.dev/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article> 
-<article class="game-card" data-name="làng vũ đại" data-added="2026-10-08">
-<div class="game-number">84</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Làng Vũ Đại" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Flangvudai.fun%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Làng Vũ Đại</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://langvudai.fun/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article> 
 <article class="game-card" data-name="đà nẵng" data-added="2026-10-08">
 <div class="game-number">85</div>
 <div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đà Nẵng" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
@@ -1656,150 +1805,17 @@ a:focus-visible,input:focus-visible{
 <a class="play-btn" href="http://littledanang.oryzen.cloud/" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
-</article> 
-<article class="game-card" data-added="2026-10-06" data-name="quán nhậu">
-<div class="game-number">86</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Quán Nhậu" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fquannhau24h.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Quán Nhậu 24g</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://quannhau24h.vercel.app/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
 </article>
-<article class="game-card" data-added="2026-10-06" data-name="trà và chuyện nhỏ">
-<div class="game-number">87</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Trà và chuyện nhỏ" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fhee-game.lovsy.top%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<article class="game-card" data-name="đám cưới chuột">
+<div class="game-number">17</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đám cưới chuột" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                            this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                            src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdamcuoichuot.com%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
 <div class="game-content">
-<h2>Trà và chuyện nhỏ</h2>
+<h2>Đám cưới chuột</h2>
 <div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
 </div>
-<a class="play-btn" href="https://hee-game.lovsy.top/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-added="2026-10-06" data-name="cây kéo thần,cắt tóc">
-<div class="game-number">88</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cây kéo thần" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fcay-keo-than?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Cây kéo thần</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://joyup.vn/game/cay-keo-than" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-added="2026-10-06" data-name="quần áo, shop quần áo, tiệm thời  ">
-<div class="game-number">89</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Cây kéo thần" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fmy-little-boutique.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Tiệm thời trang </h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://my-little-boutique.vercel.app/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-added="2026-10-06" data-name="đồ ăn vặt">
-<div class="game-number">90</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đồ ăn vặt" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdoanvat.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Đồ ăn vặt</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://doanvat.vercel.app/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-added="2026-10-06" data-name="thị trấn nhỏ">
-<div class="game-number">91</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Thị trấn nhỏ" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fthitrannho.com%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Thị trấn nhỏ</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://thitrannho.com/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-name="rao" data-added="2026-10-09">
-<div class="game-number">92</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Rao" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Frao-game.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Rao</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://rao-game.vercel.app" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-
-<article class="game-card" data-name="tâm lý học" data-added="2026-10-09">
-<div class="game-number">93</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Tâm lý học" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fjoyup.vn%2Fgame%2Fnghe-ne?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Tâm lý học</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://joyup.vn/game/nghe-ne" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-
-<article class="game-card" data-name="hoa giấy" data-added="2026-10-09">
-<div class="game-number">94</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Hoa giấy" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Flufutu.itch.io%2Fhoa-giay?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Hoa giấy</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://lufutu.itch.io/hoa-giay" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-
-<article class="game-card" data-name="thung lũng sao rơi" data-added="2026-10-09">
-<div class="game-number">95</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Thung Lũng Sao Rơi" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fstarfall-valley.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Thung Lũng Sao Rơi</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://starfall-valley.vercel.app/" rel="noopener noreferrer" target="_blank">
-          Chơi <span class="arrow">↗</span>
-</a>
-</article>
-<article class="game-card" data-name="chăn trâu" data-added="2026-10-09">
-<div class="game-number">96</div>
-<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Chăn trâu" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
-                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
-                                              src=" https://s.wordpress.com/mshots/v1/https%3A%2F%2Fnuoibo3d.vietcode.io.vn%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
-<div class="game-content">
-<h2>Chăn trâu</h2>
-<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
-</div>
-<a class="play-btn" href="https://nuoibo3d.vietcode.io.vn/" rel="noopener noreferrer" target="_blank">
+<a class="play-btn" href="https://damcuoichuot.com" rel="noopener noreferrer" target="_blank">
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
@@ -1816,14 +1832,54 @@ a:focus-visible,input:focus-visible{
           Chơi <span class="arrow">↗</span>
 </a>
 </article>
-    
-    
+<article class="game-card" data-name="đế chế vỉ hè">
+<div class="game-number">18</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đế chế vỉ hè" class="game-cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fde-che-via-he.pages.dev%2F%3F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Đ</span></div>
+<div class="game-content">
+<h2>Đế chế vỉa hè</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://decheviahe.com" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
+<article class="game-card" data-added="2026-10-06" data-name="đồ ăn vặt">
+<div class="game-number">90</div>
+<div aria-hidden="true" class="game-icon"><img alt="Ảnh bìa Đồ ăn vặt" class="game-cover" loading="lazy" onerror="this.style.display='none'; 
+                                              this.nextElementSibling.style.display='grid';" referrerpolicy="no-referrer" 
+                                              src="https://s.wordpress.com/mshots/v1/https%3A%2F%2Fdoanvat.vercel.app%2F?w=600&amp;h=420"/><span aria-hidden="true" class="game-cover-fallback">Z</span></div>
+<div class="game-content">
+<h2>Đồ ăn vặt</h2>
+<div class="game-meta"><span class="status-dot"></span> Sẵn sàng chơi</div>
+</div>
+<a class="play-btn" href="https://doanvat.vercel.app/" rel="noopener noreferrer" target="_blank">
+          Chơi <span class="arrow">↗</span>
+</a>
+</article>
 </section>
 <div class="empty" id="empty">Không tìm thấy game phù hợp.</div>
+</div>
+<aside class="game-sidebar" aria-label="Thống kê và game hot">
+  <section class="side-panel">
+    <h2 class="side-title">📊 MeeGame hôm nay</h2>
+    <div class="side-stats stats-legacy">
+      <div class="stat-box"><span class="stat-emoji">🎮</span><span class="stat-number" id="stat-total-games">0</span><span class="stat-label">Tổng game</span></div>
+      <div class="stat-box"><span class="stat-emoji">🔥</span><span class="stat-number" id="stat-total-plays">0</span><span class="stat-label">Lượt bấm</span></div>
+      <div class="stat-box"><span class="stat-emoji">✨</span><span class="stat-number" id="stat-hot-games">0</span><span class="stat-label">Game đã chơi</span></div>
+    </div>
+    <p class="side-hint" id="stats-status">Số liệu sẽ hiển thị sau khi tải dữ liệu thống kê.</p>
+  </section>
+  <section class="side-panel">
+    <h2 class="side-title">🔥 Top game hot</h2>
+    <div class="hot-list" id="hot-list"><div class="side-hint">Đang tải thứ hạng game…</div></div>
+    <p class="side-hint">Xếp hạng dựa trên lượt bấm Chơi được ghi nhận trong Supabase.</p>
+  </section>
+</aside>
+</div>
 <footer>𝗠𝗲𝗲𝗚𝗮𝗺𝗲 | UPDATE MÃ - LINK | 📩 nhuhuyenakgl1501@gmail.com </footer>
 <script>
 (() => {
-  // CẤU HÌNH SUPABASE: điền Project URL và anon/publishable key theo README_SETUP.txt.
+  // CẤU HÌNH SUPABASE: chỉ dùng Publishable/anon key công khai, không dùng service_role/secret key.
   const SUPABASE_URL = 'https://htrnwvupteggobokcrvb.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_pSqGk-pV3ZI1jmAuIujS1g_CxVVHx67';
   const supabaseReady = /^https:\/\/[^\s]+\.supabase\.co\/?$/.test(SUPABASE_URL) &&
@@ -1856,7 +1912,9 @@ a:focus-visible,input:focus-visible{
   function isRecent(card) {
     const date = addedAt(card);
     if (!date) return false;
-    return date.getTime() >= RECENT_START.getTime() && date.getTime() <= today.getTime();
+    const fiveDayWindow = new Date(today);
+    fiveDayWindow.setDate(fiveDayWindow.getDate() - 4);
+    return date.getTime() >= Math.max(RECENT_START.getTime(), fiveDayWindow.getTime()) && date.getTime() <= today.getTime();
   }
   function gameKey(card) {
     const link = card.querySelector('.play-btn');
@@ -1864,6 +1922,39 @@ a:focus-visible,input:focus-visible{
     catch (_) { return (link?.href || card.dataset.name || '').trim(); }
   }
   function countFor(card) { return Number(counts[gameKey(card)] || 0); }
+  function hotRankedCards() { return [...cards].filter(c => countFor(c) > 0).sort((a,b) => countFor(b)-countFor(a)).slice(0,8); }
+  function isHot(card) { return hotRankedCards().includes(card); }
+  function decorateCard(card) {
+    let badges = card.querySelector('.game-badges');
+    if (!badges) { badges = document.createElement('div'); badges.className = 'game-badges'; card.appendChild(badges); }
+    badges.replaceChildren();
+    if (isRecent(card)) { const b=document.createElement('span'); b.className='game-badge new'; b.textContent='NEW'; badges.appendChild(b); }
+    if (isHot(card)) { const b=document.createElement('span'); b.className='game-badge hot'; b.textContent='HOT'; badges.appendChild(b); }
+  }
+  function renderSidebar() {
+    const total = cards.reduce((sum,c)=>sum+countFor(c),0);
+    const recent = cards.filter(isRecent).length;
+    document.getElementById('stat-total-games').textContent = cards.length.toLocaleString('vi-VN');
+    document.getElementById('stat-total-plays').textContent = total.toLocaleString('vi-VN');
+    document.getElementById('stat-hot-games').textContent = cards.filter(c=>countFor(c)>0).length.toLocaleString('vi-VN');
+    document.getElementById('stats-status').textContent = supabaseReady ? 'Đã kết nối cấu hình Supabase; lượt chơi được đồng bộ khi API và quyền truy cập hoạt động.' : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
+    const list=document.getElementById('hot-list');
+    const top=hotRankedCards().slice(0,3);
+    list.replaceChildren();
+    if (!top.length) { const note=document.createElement('div'); note.className='side-hint'; note.textContent=supabaseReady?'Chưa có lượt chơi được ghi nhận.':'Cần cấu hình Supabase để hiện Top game hot.'; list.appendChild(note); }
+    top.forEach((card,i)=>{
+      const item=document.createElement('div'); item.className='hot-item';
+      const rank=document.createElement('span'); rank.className='hot-rank'; rank.textContent=String(i+1).padStart(2,'0');
+      const sourceImg=card.querySelector('.game-cover');
+      const cover=document.createElement('img'); cover.className='hot-cover'; cover.alt=''; cover.loading='lazy';
+      if (sourceImg?.src) cover.src=sourceImg.src;
+      cover.onerror=()=>{ cover.style.visibility='hidden'; };
+      const name=document.createElement('span'); name.className='hot-name'; name.textContent=card.querySelector('h2')?.textContent.trim()||card.dataset.name||'Game';
+      const count=document.createElement('span'); count.className='hot-count'; count.textContent=countFor(card).toLocaleString('vi-VN')+' lượt';
+      item.append(rank,cover,name,count); list.appendChild(item);
+    });
+    cards.forEach(decorateCard);
+  }
   function addStats(card) {
     let stat = card.querySelector('.play-count');
     if (!stat) {
@@ -1880,15 +1971,21 @@ a:focus-visible,input:focus-visible{
   function updateTabCounts() {
     document.getElementById('all-count').textContent = cards.length;
     document.getElementById('recent-count').textContent = cards.filter(isRecent).length;
-    document.getElementById('hot-count').textContent = cards.filter(c => countFor(c) > 0).length;
+    document.getElementById('hot-count').textContent = hotRankedCards().length;
+    renderSidebar();
   }
   function filter() {
     cards.forEach(card => { card.style.display = 'none'; });
     const q = (input.value || '').toLocaleLowerCase('vi-VN').trim();
     let list = [...cards];
     if (activeTab === 'recent') list = list.filter(isRecent);
-    if (activeTab === 'hot') list.sort((a,b) => countFor(b) - countFor(a));
-    else if (activeTab === 'recent') list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
+    if (activeTab === 'hot') list = hotRankedCards();
+    if (activeTab === 'all') list.sort((a,b) => {
+      const an = (a.dataset.name || a.querySelector('h2')?.textContent || '').trim();
+      const bn = (b.dataset.name || b.querySelector('h2')?.textContent || '').trim();
+      return an.localeCompare(bn, 'vi', { sensitivity: 'base', numeric: true });
+    });
+    if (activeTab === 'recent') list.sort((a,b) => (addedAt(b)?.getTime() || 0) - (addedAt(a)?.getTime() || 0));
     list.forEach(card => {
       const name = (card.dataset.name || card.querySelector('h2')?.textContent || '').toLocaleLowerCase('vi-VN');
       card.style.display = name.includes(q) ? 'grid' : 'none';
@@ -1897,9 +1994,9 @@ a:focus-visible,input:focus-visible{
     const visible = list.filter(card => card.style.display !== 'none').length;
     empty.style.display = visible ? 'none' : 'block';
     empty.textContent = activeTab === 'recent'
-      ? 'Chưa có game nào được thêm từ ngày 06/09/2026 đến hôm nay.'
+      ? 'Chưa có game nào được thêm trong 5 ngày gần đây.'
       : activeTab === 'hot'
-        ? (supabaseReady ? 'Chưa có lượt mở link nào được ghi nhận. Hãy mở game để bắt đầu thống kê.' : 'Cần cấu hình Supabase để Game hot xếp hạng theo lượt mở link trên mọi thiết bị. Xem README_SETUP.txt trong gói tải về.')
+        ? 'Chưa có lượt truy cập để xếp hạng Game hot.'
         : 'Không tìm thấy game phù hợp.';
     list.forEach(card => grid.appendChild(card));
     updateTabCounts();
