@@ -1861,7 +1861,7 @@ a:focus-visible,input:focus-visible{
 </div>
 <aside class="game-sidebar" aria-label="Thống kê và game hot">
   <section class="side-panel">
-    <h2 class="side-title">🎮 MeeGame hôm nay</h2>
+    <h2 class="side-title">🎊 MeeGame hôm nay</h2>
     <div class="side-stats stats-legacy">
       <div class="stat-box"><span class="stat-emoji">🎮</span><span class="stat-number" id="stat-total-games">0</span><span class="stat-label">Tổng game</span></div>
       <div class="stat-box"><span class="stat-emoji">🔥</span><span class="stat-number" id="stat-total-plays">0</span><span class="stat-label">Lượt bấm</span></div>
@@ -1937,7 +1937,7 @@ a:focus-visible,input:focus-visible{
     document.getElementById('stat-total-games').textContent = cards.length.toLocaleString('vi-VN');
     document.getElementById('stat-total-plays').textContent = total.toLocaleString('vi-VN');
     document.getElementById('stat-hot-games').textContent = cards.filter(c=>countFor(c)>0).length.toLocaleString('vi-VN');
-    document.getElementById('stats-status').textContent = supabaseReady ? 'Đã kết nối cấu hình Supabase; lượt chơi được đồng bộ khi API và quyền truy cập hoạt động.' : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
+    document.getElementById('stats-status').textContent = supabaseReady ? : 'Chưa cấu hình Supabase. Danh sách game vẫn hoạt động bình thường.';
     const list=document.getElementById('hot-list');
     const top=hotRankedCards().slice(0,3);
     list.replaceChildren();
