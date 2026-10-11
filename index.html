@@ -741,6 +741,80 @@ body.dark-mode input{background:transparent;color:var(--brown)}
  .settings-close .close-sticker{width:36px;height:32px}
 }
 
+
+
+/* Final polish: complete dark theme coverage and keep every cat sticker fully visible. */
+body.dark-mode .stats-legacy .stat-box,
+body.dark-mode .stat-box {
+  background:#2b2521 !important;
+  border-color:#514239 !important;
+  color:var(--brown) !important;
+}
+body.dark-mode .hot-item {
+  background:#2b2521 !important;
+  border-color:#514239 !important;
+  color:var(--brown) !important;
+}
+body.dark-mode .hot-cover {
+  background:#382d26 !important;
+  border-color:#514239 !important;
+}
+body.dark-mode .hot-rank {
+  background:#59421b !important;
+  color:#f7eadb !important;
+}
+body.dark-mode .hot-count { color:#e7c4a4 !important; }
+body.dark-mode .game-badge.new {
+  background:#29412f !important;
+  color:#c7edcc !important;
+}
+body.dark-mode .game-badge.hot {
+  background:#4a2b20 !important;
+  color:#ffd0b6 !important;
+}
+body.dark-mode .game-tab .tab-count {
+  background:#382d26 !important;
+  color:var(--brown) !important;
+}
+body.dark-mode .settings-panel,
+body.dark-mode .settings-action,
+body.dark-mode .settings-close {
+  color:var(--brown);
+  border-color:var(--line);
+}
+body.dark-mode .settings-close {
+  background:#f7eadb;
+  color:#382017;
+}
+/* Smaller image boxes prevent the cat artwork from touching/crossing the edges. */
+.settings-action .setting-icon {
+  width:30px !important;
+  height:30px !important;
+  min-width:30px;
+  overflow:visible !important;
+}
+.settings-action .setting-sticker {
+  width:28px !important;
+  height:28px !important;
+  max-width:28px;
+  max-height:28px;
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+.settings-close .close-sticker {
+  width:30px !important;
+  height:27px !important;
+  max-width:30px;
+  max-height:27px;
+  object-fit:contain !important;
+  object-position:center center !important;
+}
+@media(max-width:420px) {
+  .settings-action .setting-icon { width:28px !important; height:28px !important; min-width:28px; }
+  .settings-action .setting-sticker { width:26px !important; height:26px !important; max-width:26px; max-height:26px; }
+  .settings-close .close-sticker { width:28px !important; height:25px !important; max-width:28px; max-height:25px; }
+}
+
 </style>
 </head>
 <body>
