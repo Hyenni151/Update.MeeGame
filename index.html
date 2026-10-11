@@ -815,6 +815,84 @@ body.dark-mode .settings-close {
   .settings-close .close-sticker { width:28px !important; height:25px !important; max-width:28px; max-height:25px; }
 }
 
+
+
+/* MeeGame fix: dark theme consistency + fully visible settings stickers */
+body.dark-mode {
+  background: #171412 !important;
+  color: #f7eadb;
+}
+body.dark-mode .topbar,
+body.dark-mode .game-card,
+body.dark-mode .side-panel,
+body.dark-mode .game-tab,
+body.dark-mode .sort,
+body.dark-mode #search,
+body.dark-mode .empty,
+body.dark-mode .settings-panel,
+body.dark-mode .settings-action,
+body.dark-mode .stat-box,
+body.dark-mode .stats-legacy .stat-box,
+body.dark-mode .hot-item {
+  background: #24201d !important;
+  color: #f7eadb !important;
+  border-color: #514239 !important;
+}
+body.dark-mode .game-card {
+  background: linear-gradient(145deg, #29231f, #211d1a) !important;
+}
+body.dark-mode .game-card:hover { background: #302923 !important; }
+body.dark-mode .game-icon,
+body.dark-mode .game-cover-fallback {
+  background: #382d26 !important;
+  border-color: #514239 !important;
+  color: #f7eadb !important;
+}
+body.dark-mode .hot-cover { background: #382d26 !important; border-color: #514239 !important; }
+body.dark-mode .empty { background: #24201d !important; color: #c5a28b !important; }
+body.dark-mode .settings-action:hover { background: #382d26 !important; }
+body.dark-mode .settings-close {
+  background: #f7eadb !important;
+  color: #382017 !important;
+  border-color: #f7eadb !important;
+}
+body.dark-mode .settings-action .setting-value,
+body.dark-mode .game-meta,
+body.dark-mode .stat-label,
+body.dark-mode .side-hint { color: #c5a28b !important; }
+body.dark-mode .game-badge.new { background:#29412f !important; color:#c7edcc !important; }
+body.dark-mode .game-badge.hot { background:#4a2b20 !important; color:#ffd0b6 !important; }
+body.dark-mode .game-tab.active { background:#59421b !important; color:#fff1d8 !important; }
+body.dark-mode .game-tab .tab-count { background:#382d26 !important; color:#f7eadb !important; }
+
+/* Settings sticker sizing: fixed flex boxes and contain preserve the entire illustration. */
+.settings-action { min-width:0; gap:10px; }
+.settings-action .setting-icon {
+  width:36px !important; height:36px !important; min-width:36px !important;
+  flex:0 0 36px !important; display:flex; align-items:center; justify-content:center;
+  overflow:visible !important;
+}
+.settings-action .setting-sticker {
+  display:block; width:100% !important; height:100% !important;
+  max-width:36px !important; max-height:36px !important;
+  object-fit:contain !important; object-position:center !important;
+}
+.settings-action > span:not(.setting-icon) { min-width:0; }
+.settings-action .setting-value { max-width:48%; overflow-wrap:anywhere; text-align:right; }
+.settings-close { gap:9px; min-height:58px; }
+.settings-close .close-sticker {
+  display:block; width:34px !important; height:30px !important;
+  max-width:34px !important; max-height:30px !important;
+  object-fit:contain !important; object-position:center !important; flex:0 0 auto;
+}
+@media(max-width:420px) {
+  .settings-action .setting-icon { width:32px !important; height:32px !important; min-width:32px !important; flex-basis:32px !important; }
+  .settings-action .setting-sticker { max-width:32px !important; max-height:32px !important; }
+  .settings-action { gap:8px; }
+  .settings-action .setting-value { max-width:42%; font-size:11px !important; }
+  .settings-close .close-sticker { width:30px !important; height:27px !important; max-width:30px !important; max-height:27px !important; }
+}
+
 </style>
 </head>
 <body>
